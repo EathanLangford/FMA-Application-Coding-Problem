@@ -1,3 +1,4 @@
+let {intro} = require('./Mechanics')
 //GRID COORDINATES
 let Grid = {
     "_11" : "*",
@@ -12,5 +13,4 @@ let Grid = {
     "_32" : "*",
     "_33" : "*",
     }
-
 module.exports = {Grid}

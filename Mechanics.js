@@ -53,6 +53,7 @@ else {
 }
 
 var grid = function(){
+    clear()
     return console.log(`
     * X  1    2    3
     Y
@@ -97,10 +98,11 @@ const switchPlayer = function(player){
 }
 
 let winner = (player) => {
+    keepPlaying = false  
     console.log(`CONGRATULATIONS ${player.toUpperCase()} YOU ARE THE WINNER!
     THANKS FOR PLAYING!`
     )
-    return true
+    return keepPlaying
 }
 // TODO: test, refactor
 let checkColumns = function(player, grid){
@@ -134,7 +136,7 @@ let checkColumns = function(player, grid){
         //  block of code to be executed if the condition1 is false and condition2 is true
     }  
     else {
-       return "next"
+       return true
     }
 }
 
@@ -172,7 +174,7 @@ let checkRows = function(player, grid){
         //  block of code to be executed if the condition1 is false and condition2 is true
     }  
     else {
-       return "next"
+       return true
     }
 }
 
@@ -199,31 +201,44 @@ let checkDiagonals = function(player, grid){
         //  block of code to be executed if the condition1 is false and condition2 is true
     }
     else {
-       return "next"
+       return true
     }
 }
 
-let checkWin = function(player, grid){
-console.log(chalk.blue(quotes[Math.floor(Math.random()*quotes.length)]))
-checkRows(player, grid)
-checkColumns(player, grid)
-checkDiagonals(player, grid)
+let checkWin = function(player, grid,){
+console.log(chalk.bold.blue(quotes[Math.floor(Math.random()*quotes.length)]))
+
+
 if (grid._11!=="*"&&grid._12!=="*"&&grid._13!=="*"&&grid._21!=="*"&&grid._22!=="*"&&grid._23!=="*"&&grid._31!=="*"&&grid._32!=="*"&&grid._33){
-    return console.log("ITS A TIE!")
+    console.log("ITS A TIE!")
+    stopGame = true
+    return stopGame
 }
+else if (!checkRows(player, grid)){
+    keepPlaying = true
+    return keepPlaying
+    }
+else if (!checkColumns(player, grid)){
+    keepPlaying = true
+    return keepPlaying
+    }
+else if (!checkDiagonals(player, grid)){
+    keepPlaying = true
+    return keepPlaying
+    }
 }
 var getP1 = () => {
     var P1 = readline.question(`${chalk.blue("Player 1")}, You're X's. What is your name? `);
     clear()           
     console.log("GREAT!")
-    console.log(`Hello ${chalk.blue(P1)}! Nice to meet you!`);
+    console.log(`Hello ${chalk.bold.blue(P1)}! Nice to meet you!`);
     return P1
 }
 var getP2 = () => {
-    var P2 = readline.question(`${chalk.blue("Player 1")}, You're X's. What is your name? `);
+    var P2 = readline.question(`${chalk.yellow("Player 2")}, You're O's. What is your name? `);
     clear()           
     console.log("GREAT!")
-    console.log(`Hello ${chalk.yellow(P2)}! Nice to meet you also!`);
+    console.log(`Hello ${chalk.bold.yellow(P2)}! Nice to meet you also!`);
     return P2
 }
 
