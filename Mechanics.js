@@ -3,7 +3,7 @@ var _ = require('lodash');
 const chalk = require('chalk');
 const figlet = require('figlet');
 const clear = require('clear');
-let {Grid} = require('./grid.js');
+let {Grid} = require('./Grid.js');
 var Player = "";
 var P1 = "";
 var P2 = "";
@@ -29,7 +29,6 @@ let quotes = [
 
 // TODO: test, refactor
 const calculateTile = function(tile){
-    // (tile === true) ? tile=chalk.blue("X") : tile=chalk.yellow("O");
 if (tile===true) {
     return tile=chalk.blue("X");
 }
@@ -39,17 +38,6 @@ else if (tile===false) {
 else {
     return "*"
 }
-    //     switch(tile) {
-    //     case true:
-    //     return tile=chalk.blue("X");
-    //     case false:
-    //     return tile=chalk.yellow("O");
-    //     case null:
-    //     return tile=chalk.grey("*");
-    //     default:
-    //       // code block
-    //   }
-
 }
 
 var grid = function(){
@@ -70,9 +58,7 @@ const playerTurn = function(player){
     var X = readline.question(`${(player===P1) ? chalk.blue(player) : chalk.yellow(player)}, please enter your ${chalk.magenta("X")} co-ordinate: `);
     var Y = readline.question(`${(player===P1) ? chalk.blue(player) : chalk.yellow(player)}, please enter your ${chalk.magenta("Y")} co-ordinate: `);
     let XY = X+Y
-    // (Grid[XY] === true)
     if (_.get(Grid, `_${XY}`) === "*") {
-        //  block of code to be executed if the condition is true
         switch(player) {
             case player=P1:
             return _.set(Grid, `_${XY}`, true);
@@ -82,7 +68,6 @@ const playerTurn = function(player){
       } else { 
           console.log(chalk.bgRed("Sorry, invalid input. Try again!"))
           playerTurn(player)
-        //  block of code to be executed if the condition is false
       }
 
 } 
@@ -104,7 +89,7 @@ let winner = (player) => {
     )
     return keepPlaying
 }
-// TODO: test, refactor
+// TODO: test
 let checkColumns = function(player, grid){
     if (grid._11===true && grid._12===true && grid._13===true) {
         result = winner(player)
@@ -117,23 +102,19 @@ let checkColumns = function(player, grid){
     else if (grid._21===true && grid._22===true && grid._23===true) {
         result = winner(player)
         return result
-        //  block of code to be executed if the condition1 is false and condition2 is true
     } 
     else if (grid._21===false && grid._22===false && grid._23===false) {
         result = winner(player)
         return result
-        //  block of code to be executed if the condition1 is false and condition2 is true
     }
     
     else if (grid._31===true && grid._32===true && grid._33===true) {
         result = winner(player)
         return result
-        //  block of code to be executed if the condition1 is false and condition2 is true
     } 
     else if (grid._31===false && grid._32===false && grid._33===false) {
         result = winner(player)
         return result
-        //  block of code to be executed if the condition1 is false and condition2 is true
     }  
     else {
        return true
@@ -143,35 +124,29 @@ let checkColumns = function(player, grid){
 // TODO: test, refactor
 let checkRows = function(player, grid){
     if (grid._11===true && grid._21===true && grid._31===true) {
-        //  block of code to be executed if condition1 is true
         result = winner(player)
         return result
     } 
     else if (grid._11===false && grid._21===false && grid._31===false) {
         result = winner(player)
         return result
-        //  block of code to be executed if the condition1 is false and condition2 is true
     } 
 
     else if (grid._12===true && grid._22===true && grid._32===true) {
         result = winner(player)
         return result
-        //  block of code to be executed if the condition1 is false and condition2 is true
     } 
     else if (grid._12===false && grid._22===false && grid._32===false) {
         result = winner(player)
         return result
-        //  block of code to be executed if the condition1 is false and condition2 is true
     }
     else if (grid._13===true && grid._23===true && grid._33===true) {
         result = winner(player)
         return result
-        //  block of code to be executed if the condition1 is false and condition2 is true
     } 
     else if (grid._13===false && grid._23===false && grid._33===false) {
         result = winner(player)
         return result
-        //  block of code to be executed if the condition1 is false and condition2 is true
     }  
     else {
        return true
@@ -181,24 +156,20 @@ let checkRows = function(player, grid){
 // TODO: test, refactor
 let checkDiagonals = function(player, grid){
     if (grid._11===true && grid._22===true && grid._33===true) {
-        //  block of code to be executed if condition1 is true
         result = winner(player)
         return result
     } 
     else if (grid._11===false && grid._22===false && grid._33===false) {
         result = winner(player)
         return result
-        //  block of code to be executed if the condition1 is false and condition2 is true
     } 
     else if (grid._31===true && grid._22===true && grid._13===true) {
         result = winner(player)
         return result
-        //  block of code to be executed if the condition1 is false and condition2 is true
     } 
     else if (grid._31===false && grid._22===false && grid._13===false) {
         result = winner(player)
         return result
-        //  block of code to be executed if the condition1 is false and condition2 is true
     }
     else {
        return true
