@@ -4,13 +4,10 @@ const chalk = require('chalk');
 const figlet = require('figlet');
 const clear = require('clear');
 let {Grid} = require('./Grid.js');
-var Player = "";
-var P1 = "";
-var P2 = "";
 
 
 
-// RANDOM QUOTES
+// RANDOM QUOTES TO DISPLAY
 let quotes = [
     "Well done.",
     "Thank you.",
@@ -27,7 +24,8 @@ let quotes = [
     "Smooth."
 ]
 
-// TODO: test, refactor
+// TODO: test
+//CALCULATES AN INDIVIDUAL TILE ON THE GRID BASED ON BOOLEAN
 const calculateTile = function(tile){
 if (tile===true) {
     return tile=chalk.blue("X");
@@ -40,7 +38,9 @@ else {
 }
 }
 
-var grid = function(){
+//DISPLAY THE GRID
+//DONT TEST
+var displayGrid = function(){
     clear()
     return console.log(`
     * X  1    2    3
@@ -53,26 +53,43 @@ var grid = function(){
     `)
 }
 
-// TODO: test
-const playerTurn = function(player){
-    var X = readline.question(`${(player===P1) ? chalk.blue(player) : chalk.yellow(player)}, please enter your ${chalk.magenta("X")} co-ordinate: `);
-    var Y = readline.question(`${(player===P1) ? chalk.blue(player) : chalk.yellow(player)}, please enter your ${chalk.magenta("Y")} co-ordinate: `);
+//TODO: test
+const getInput = (player, XorY) => {
+    let input = readline.question(`${(player===P1) ? chalk.blue(player) : chalk.yellow(player)}, please enter your ${chalk.bold.magenta(`${XorY}`)} co-ordinate: `);
+    if (parseInt(input)<=3){
+    return input
+    }
+    else {
+        console.log("Sorry, invalid input")
+        return getInput(player, XorY)
+    }
+}
+
+//TODO: test
+const getXY = function(player){
+    let X = getInput(player, "X")
+    let Y = getInput(player, "Y")
     let XY = X+Y
-    if (_.get(Grid, `_${XY}`) === "*") {
-        switch(player) {
-            case player=P1:
-            return _.set(Grid, `_${XY}`, true);
-            case player=P2:
-            return _.set(Grid, `_${XY}`, false);
+    // console.log(typeof XY)
+    return XY
+}
+
+// TODO: test
+//TAKES USER INPUT AND CONVERTS TO GRID COORDINATES
+const setTile = (player, grid, xy) => {
+    let gridTile = _.get(grid, `_${xy}`)
+    if (gridTile === "*") {
+            let setTile = (player===P1) ? _.set(grid, `_${xy}`, true) : _.set(grid, `_${xy}`, false)
+            return setTile;
           }
-      } else { 
+        else { 
           console.log(chalk.bgRed("Sorry, invalid input. Try again!"))
-          playerTurn(player)
+          return false
       }
+}
 
-} 
 
-// TODO: test, refactor
+// TODO: test
 const switchPlayer = function(player){
     switch(player) {
         case P1:
@@ -82,6 +99,7 @@ const switchPlayer = function(player){
       }
 }
 
+//WINNING CONGRATULATION MESSAGE
 let winner = (player) => {
     keepPlaying = false  
     console.log(`CONGRATULATIONS ${player.toUpperCase()} YOU ARE THE WINNER!
@@ -89,7 +107,9 @@ let winner = (player) => {
     )
     return keepPlaying
 }
+
 // TODO: test
+//CHECKS EACH COLUMN POSIBILITY
 let checkColumns = function(player, grid){
     if (grid._11===true && grid._12===true && grid._13===true) {
         result = winner(player)
@@ -176,26 +196,17 @@ let checkDiagonals = function(player, grid){
     }
 }
 
+//TODO: test
 let checkWin = function(player, grid,){
-console.log(chalk.bold.blue(quotes[Math.floor(Math.random()*quotes.length)]))
 
-
-if (grid._11!=="*"&&grid._12!=="*"&&grid._13!=="*"&&grid._21!=="*"&&grid._22!=="*"&&grid._23!=="*"&&grid._31!=="*"&&grid._32!=="*"&&grid._33){
-    console.log("ITS A TIE!")
-    stopGame = true
-    return stopGame
-}
-else if (!checkRows(player, grid)){
+if (!checkRows(player, grid) || !checkColumns(player, grid) || !checkDiagonals(player, grid)){
     keepPlaying = true
     return keepPlaying
     }
-else if (!checkColumns(player, grid)){
-    keepPlaying = true
-    return keepPlaying
-    }
-else if (!checkDiagonals(player, grid)){
-    keepPlaying = true
-    return keepPlaying
+else if (grid._11!=="*"&&grid._12!=="*"&&grid._13!=="*"&&grid._21!=="*"&&grid._22!=="*"&&grid._23!=="*"&&grid._31!=="*"&&grid._32!=="*"&&grid._33!=="*"){
+        console.log("ITS A TIE!")
+        stopGame = true
+        return stopGame
     }
 }
 var getP1 = () => {
@@ -208,7 +219,7 @@ var getP1 = () => {
 var getP2 = () => {
     var P2 = readline.question(`${chalk.yellow("Player 2")}, You're O's. What is your name? `);
     clear()           
-    console.log("GREAT!")
+    console.log("AWESOME!")
     console.log(`Hello ${chalk.bold.yellow(P2)}! Nice to meet you also!`);
     return P2
 }
@@ -238,5 +249,5 @@ clear()
 return P1
 }
 
-module.exports = {grid, playerTurn, switchPlayer, checkWin, intro}
+module.exports = {displayGrid, playerTurn, switchPlayer, checkWin, intro, getXY, setTile}
 
