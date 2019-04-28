@@ -1,6 +1,6 @@
 const assert = require('chai').assert;
 const app = require('../app')
-let {displayGrid, playerTurn, switchPlayer, checkWin, intro, getXY} = require('../Mechanics')
+let {displayGrid, playerTurn, getInput, switchPlayer, checkWin, intro, calcXY, calculateTile} = require('../Mechanics')
 let {Grid} = require('../Grid.js')
 var stopGame = false
 var _ = require('lodash');
@@ -9,6 +9,60 @@ const figlet = require('figlet');
 const clear = require('clear');
 const chai = require('chai')
 
+
+
+
+describe('Mechanics', function(){
+
+describe('calculateTile() should take the tile and return the symbol', function(){
+    it('shows P1 tile "X"', function(){
+        let tile = true
+        const actual = calculateTile(tile)
+        assert.equal(actual, chalk.blue("X"))
+    })
+    it('shows P2 tile, "O"', function(){
+        let tile = false
+        const actual = calculateTile(tile)
+        assert.equal(actual, chalk.yellow("O"))
+    })
+    it('shows empty space "*"', function(){
+        let tile = null
+        const actual = calculateTile(tile)
+        assert.equal(actual, "*")
+    })
+})
+
+//getInput
+// const getInput = (player, XorY) => {
+//     let input = readline.question(`${(player===P1) ? chalk.blue(player) : chalk.yellow(player)}, please enter your ${chalk.bold.magenta(`${XorY}`)} co-ordinate: `);
+//     if (parseInt(input)<=3){
+//     return input
+//     }
+//     else {
+//         console.log("Sorry, invalid input")
+//         return getInput(player, XorY)
+//     }
+// }
+describe('getInput() should take the X or Y co-ordinate from player', function(){
+    it('If entered a number less than 3, it will return it', function(){
+        let P1 = "name"
+        let player = P1
+        let X = "3"
+        const actual = getInput(player, X)
+        assert.equal(actual, "3")
+    })
+})
+
+//calcXY
+//setTile
+//switchPlayer
+//winner
+//checkColumns
+//checkRows
+//checkDiagonals
+//checkWin
+//getP1
+//getP2
 
 // const sayHello = require('../app').sayHello;
 // const addNumbers = require('../app').addNumbers;
@@ -34,7 +88,6 @@ const chai = require('chai')
 //         assert.equal(P2, actual)
 //     })
 // })
-describe('Mechanics', function(){
     describe('', function(){
         it('', function(){
         })
@@ -43,23 +96,10 @@ describe('Mechanics', function(){
     // describe('get XY co-ordinates from player', function(){
     //     it('should be a string of combined co-ordinates', function(){
     //         P1 = "name"
-    //         const actual = getXY(P1)
+    //         const actual = calcXY(P1)
     //         assert.typeOf(actual, 'string')
     //     })
     // })
-    describe('PlayerTurn()', function(){
-        it('P1 coordinate input should return the changed grid variable', function(){
-            // let result = app.sayHello();
-            P1 = "name"
-            Player = P1
-            let xy = 11
-            const mockTurn = _.set(Grid, `_${xy}`, true);
-
-            const actual = playerTurn(Player, Grid, xy)
-            // expect(playerTurn(P1, Grid)).to.equal(expected)
-          assert.equal(actual, mockTurn)
-        })
-    })
       
         // it('sayHello should return type Bool', function(){
         //     // let result = app.sayHello();

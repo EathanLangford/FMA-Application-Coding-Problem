@@ -7,39 +7,47 @@ let {Grid} = require('./Grid.js');
 
 
 
-// RANDOM QUOTES TO DISPLAY
-let quotes = [
-    "Well done.",
-    "Thank you.",
-    "Oh, oh!",
-    "Nearly.",
-    "Wow! Nice play.",
-    "Bam!",
-    "This isn't your first time playing.",
-    "Moving on!",
-    "Oof, you play dirty!",
-    "Strategic, nice.",
-    "Hmmmmm.",
-    "Crazy!",
-    "Smooth."
-]
+//INTRODUCTION FUNCTION
+let intro = () => {
+    clear()
+    console.log(figlet.textSync('TIC TAC TOE!', {
+        font: 'Standard',
+        horizontalLayout: 'default',
+        verticalLayout: 'default'
+    }));
+    console.log("to start with...")
+    P1 = getP1()
+    P2 = getP2()
+    console.log(chalk.green('LETS GET STARTED!'))
+    readline.question(chalk.red("Press Enter to continue..."))
+    clear()
+    console.log(`
+    ${chalk.bgBlue("HOW TO PLAY:")}
+    3 in a row wins. 
+    Enter your coordinate X first, and Y second.
+    For example: 1,1.
+    This will choose the first row, first column.
+`)
+readline.question(chalk.red("Press Enter to continue..."))
+clear()
+return P1
+}
 
-// TODO: test
+
 //CALCULATES AN INDIVIDUAL TILE ON THE GRID BASED ON BOOLEAN
 const calculateTile = function(tile){
-if (tile===true) {
-    return tile=chalk.blue("X");
-}
-else if (tile===false) {
-    return tile=chalk.yellow("O");
-}
+    if (tile) {
+        return tile=chalk.blue("X");
+    }
+    else if (tile===false) {
+        return tile=chalk.yellow("O");
+    }
 else {
     return "*"
 }
 }
 
 //DISPLAY THE GRID
-//DONT TEST
 var displayGrid = function(){
     clear()
     return console.log(`
@@ -48,30 +56,80 @@ var displayGrid = function(){
     1    ${calculateTile(Grid._11)}    ${calculateTile(Grid._21)}    ${calculateTile(Grid._31)}
 
     2    ${calculateTile(Grid._12)}    ${calculateTile(Grid._22)}    ${calculateTile(Grid._32)}
-
+    
     3    ${calculateTile(Grid._13)}    ${calculateTile(Grid._23)}    ${calculateTile(Grid._33)}
     `)
 }
 
-//TODO: test
-const getInput = (player, XorY) => {
-    let input = readline.question(`${(player===P1) ? chalk.blue(player) : chalk.yellow(player)}, please enter your ${chalk.bold.magenta(`${XorY}`)} co-ordinate: `);
-    if (parseInt(input)<=3){
-    return input
-    }
-    else {
-        console.log("Sorry, invalid input")
-        return getInput(player, XorY)
-    }
+//GETS USER INPUT 
+const getUserInput = (player, XorY) => {
+    return readline.question(`${(player===P1) ? chalk.blue(player) : chalk.yellow(player)}, please enter your ${chalk.bold.magenta(`${XorY}`)} co-ordinate: `);
 }
 
-//TODO: test
-const getXY = function(player){
-    let X = getInput(player, "X")
-    let Y = getInput(player, "Y")
-    let XY = X+Y
-    // console.log(typeof XY)
-    return XY
+//todo test with number above 4, symbol and empty
+const validateUserInput = (input) => {
+    let valid = false
+    while (!valid){
+        let coOrd = parseInt(input)
+        if (coOrd>=4 || !coOrd){
+            console.log("Sorry, invalid input")
+            valid = false
+            
+        }
+        else {
+            valid = true
+        }  
+    }
+    return valid
+}
+
+
+const playerTurn = (getInputFunction, validateFunction, player, coOrd) => { 
+        let XorY = getInputFunction(player, coOrd)
+        let valid = validateFunction(XorY)
+        while (!valid) {
+          XorY = getInputFunction(player, coOrd)
+          valid = validateFunction(XorY)
+        }
+        return XorY
+}
+
+//Refactor P1 and P2 into one!
+//TODO: test with no entry
+var getP1 = () => {
+    let nameEntered = false
+    while (!nameEntered){
+        var P1 = readline.question(`${chalk.blue("Player 1")}, You're X's. What is your player name? `);
+        if (!P1){
+            clear()
+            console.log("Sorry, You must enter a something.")
+        }
+        else {
+            clear()           
+            nameEntered = true
+            console.log("GREAT!")
+            console.log(`Hello ${chalk.bold.blue(P1)}! Nice to meet you!`);
+            return P1
+        }
+    }
+
+}
+var getP2 = () => {
+    let nameEntered = false
+    while (!nameEntered){
+        var P2 = readline.question(`${chalk.blue("Player 2")}, You're X's. What is your player name? `);
+        if (!P2){
+            clear()
+            console.log("Sorry, You must enter a something.")
+        }
+        else {
+            clear()           
+            nameEntered = true
+            console.log("AWESOME!")
+            console.log(`Hello ${chalk.bold.blue(P2)}! Nice to meet you too!`);
+            return P2
+        }
+    }
 }
 
 // TODO: test
@@ -79,8 +137,7 @@ const getXY = function(player){
 const setTile = (player, grid, xy) => {
     let gridTile = _.get(grid, `_${xy}`)
     if (gridTile === "*") {
-            let setTile = (player===P1) ? _.set(grid, `_${xy}`, true) : _.set(grid, `_${xy}`, false)
-            return setTile;
+            return (player===P1) ? _.set(grid, `_${xy}`, true) : _.set(grid, `_${xy}`, false);
           }
         else { 
           console.log(chalk.bgRed("Sorry, invalid input. Try again!"))
@@ -88,6 +145,35 @@ const setTile = (player, grid, xy) => {
       }
 }
 
+// RANDOM QUOTES TO DISPLAY
+let cheekyQuote = (player) => {
+let quotes = [
+    `Well done ${player}.`,
+    `Thank you ${player}.`,
+    `Oh, oh! ${player}! Nice!`,
+    `Nearly ${player}!`,
+    `Wow! Nice play ${player}!`,
+    `Bam!`,
+    `Killin' it ${player}`,
+    `This isn't your first time playing is it ${player}?`,
+    `Moving on!`,
+    `Oof, you play dirty, ${player}!`,
+    `Strategic, nice ${player}.`,
+    `Hmmmmm.`,
+    `Crazy! ${player}!`,
+    `Smooth.`,
+    `WOAH! ${player}!`,
+    `Well...That could've gone smoother ${player}.`,
+    `Royal flush! wait, wrong game ${player}.`,
+    `Goaaaaaaaaaal! ${player}!`,
+    `Knockout, ${player}!`,
+    `Well played ${player}.`,
+    `Have you seen the latest Game of Thrones ${player}?!`,
+    `Boom! Nice ${player}!`,
+    `Cool, cool cool coooool.`
+]
+console.log(chalk.blue(quotes[Math.floor(Math.random()*quotes.length)]))
+}
 
 // TODO: test
 const switchPlayer = function(player){
@@ -102,13 +188,13 @@ const switchPlayer = function(player){
 //WINNING CONGRATULATION MESSAGE
 let winner = (player) => {
     keepPlaying = false  
-    console.log(`CONGRATULATIONS ${player.toUpperCase()} YOU ARE THE WINNER!
+    console.log(`CONGRATULATIONS ${chalk.bold.green(player.toUpperCase())} YOU ARE THE ${chalk.bold("WINNER")}!
     THANKS FOR PLAYING!`
     )
     return keepPlaying
 }
 
-// TODO: test
+// TODO: test one full column and an empty grid.
 //CHECKS EACH COLUMN POSIBILITY
 let checkColumns = function(player, grid){
     if (grid._11===true && grid._12===true && grid._13===true) {
@@ -141,7 +227,7 @@ let checkColumns = function(player, grid){
     }
 }
 
-// TODO: test, refactor
+// TODO: test one full column and an empty grid.
 let checkRows = function(player, grid){
     if (grid._11===true && grid._21===true && grid._31===true) {
         result = winner(player)
@@ -173,7 +259,7 @@ let checkRows = function(player, grid){
     }
 }
 
-// TODO: test, refactor
+// TODO: test one full column and an empty grid.
 let checkDiagonals = function(player, grid){
     if (grid._11===true && grid._22===true && grid._33===true) {
         result = winner(player)
@@ -196,7 +282,7 @@ let checkDiagonals = function(player, grid){
     }
 }
 
-//TODO: test
+//TODO: test pass a full grid with a tie, grid with one win, and empty
 let checkWin = function(player, grid,){
 
 if (!checkRows(player, grid) || !checkColumns(player, grid) || !checkDiagonals(player, grid)){
@@ -209,45 +295,6 @@ else if (grid._11!=="*"&&grid._12!=="*"&&grid._13!=="*"&&grid._21!=="*"&&grid._2
         return stopGame
     }
 }
-var getP1 = () => {
-    var P1 = readline.question(`${chalk.blue("Player 1")}, You're X's. What is your name? `);
-    clear()           
-    console.log("GREAT!")
-    console.log(`Hello ${chalk.bold.blue(P1)}! Nice to meet you!`);
-    return P1
-}
-var getP2 = () => {
-    var P2 = readline.question(`${chalk.yellow("Player 2")}, You're O's. What is your name? `);
-    clear()           
-    console.log("AWESOME!")
-    console.log(`Hello ${chalk.bold.yellow(P2)}! Nice to meet you also!`);
-    return P2
-}
 
-let intro = () => {
-    clear()
-    console.log(figlet.textSync('TIC TAC TOE!', {
-        font: 'Standard',
-        horizontalLayout: 'default',
-        verticalLayout: 'default'
-    }));
-    console.log("to start with...")
-    P1 = getP1()
-    P2 = getP2()
-    console.log(chalk.green('LETS GET STARTED!'))
-    readline.question(chalk.red("Press Enter to continue..."))
-clear()
-console.log(`
-${chalk.bgBlue("HOW TO PLAY:")}
-3 in a row wins. 
-Enter your coordinate X first, and Y second.
-For example: 1,1.
-This will choose the first row, first column.
-`)
-readline.question(chalk.red("Press Enter to continue..."))
-clear()
-return P1
-}
-
-module.exports = {displayGrid, playerTurn, switchPlayer, checkWin, intro, getXY, setTile}
+module.exports = {displayGrid, switchPlayer, checkWin, getUserInput, intro, , setTile, cheekyQuote, calculateTile, getUserInput, validateUserInput, playerTurn}
 

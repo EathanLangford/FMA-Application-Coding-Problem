@@ -1,4 +1,4 @@
-let {displayGrid, playerTurn, setTile, switchPlayer, checkWin, intro, getXY} = require('./Mechanics')
+let {displayGrid, setTile, switchPlayer, checkWin, intro, calcXY, cheekyQuote, getUserInput, validateUserInput, playerTurn} = require('./Mechanics')
 let {Grid} = require('./Grid.js')
 
 //RUN INTRODUCTION AND NAME GETTING AND SET IT TO PLAYER
@@ -7,21 +7,15 @@ var Player = intro()
 //DISPLAY GRID
 displayGrid()
 
-
 //LOOP TO CONTROL GAMEPLAY
-var stopGame = false
-while (!stopGame) {
-  //GET XY OFF PLAYER
-    xy = getXY(Player)
-  //SETTING THE TILE BASED ON PLAYERS TURN
-    let playerTurn = setTile(Player, Grid, xy)
-  //IF SPACE TAKEN RETURNS FALSE, WHILE FALSE ASK AGAIN
-    while (!playerTurn) {
-        xy = getXY(Player)
-        playerTurn = setTile(Player, Grid, xy)
-    }
-  //SHOWS GRID
+var nextTurn = false
+while (!nextTurn) {
+  //TODO: turn playerTurn into one joined function
+    let X = playerTurn(getUserInput, validateUserInput, Player, "X")
+    let Y = playerTurn(getUserInput, validateUserInput, Player, "Y")
+    let XY = X+Y
+    setTile(Player, Grid, XY)
     displayGrid()
-  //CHECKS FOR A WINNER AND DISPLAYS CHEEKY MESSAGE
-    checkWin(Player, Grid) ? stopGame = true : Player = switchPlayer(Player)
+    cheekyQuote(Player)
+    checkWin(Player, Grid) ? nextTurn = true : Player = switchPlayer(Player)
   }
