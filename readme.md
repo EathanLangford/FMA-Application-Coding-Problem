@@ -65,7 +65,7 @@ Coming from a design background, i tried to implement a little entertainment and
 
 Given more time, I'd like to refactor further and write more tests. As testing was only a new practice for me, it was definitely a challenge both to execute and within a good time. I also was experimenting was different variable declarations and between written functions and using arrow functions. Given more time, i would clean it up and stick with one way.
 
-I do wish I had commited more often. I often was so caught up it completely slipped my mind honestly. If i could do it again, i would work more effeciently on branches and commiting more often.
+I do wish I had commited way earlier, and more often. I was so caught up it completely slipped my mind honestly. If i could do it again, i would work more effeciently on branches and commiting from the start.
 
 All in all, this was a very fun albeit sometimes  frustrating experience!
 
