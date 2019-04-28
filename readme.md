@@ -48,6 +48,8 @@ I used Readline-Sync so i was able to use the user input synchronously within my
 
 There were many things in this project that i considered a challenge. 
 
+I purposely didn't look at any attempts at writing Tic-Tac-Toe in any language, as I really wanted to see what I could come up with without influence. I am excited to discuss  different approaches.
+
 I hadn't learnt Test Driven Development or had much testing experience in my recent education.
 
 I initially tried to approach the project with a TDD mindset, but found the learning involved before planning my approach to be too much of a blocker.
