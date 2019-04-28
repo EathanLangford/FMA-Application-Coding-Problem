@@ -34,9 +34,9 @@ return P1
 }
 
 
-//CALCULATES AN INDIVIDUAL TILE ON THE GRID BASED ON BOOLEAN
+//CALCULATES AN INDIVIDUAL TILE ON THE GRID BASED ON EXACT BOOLEAN
 const calculateTile = function(tile){
-    if (tile) {
+    if (tile===true) {
         return tile=chalk.blue("X");
     }
     else if (tile===false) {
@@ -74,13 +74,18 @@ const validateUserInput = (input) => {
         if (coOrd>=4 || !coOrd){
             console.log("Sorry, invalid input")
             valid = false
-            
+            return false
+        }
+        else if (!coOrd){
+            console.log("Sorry, invalid input")
+            valid = false
+            return false
         }
         else {
             valid = true
+            return true
         }  
     }
-    return valid
 }
 
 
@@ -137,7 +142,8 @@ var getP2 = () => {
 const setTile = (player, grid, xy) => {
     let gridTile = _.get(grid, `_${xy}`)
     if (gridTile === "*") {
-            return (player===P1) ? _.set(grid, `_${xy}`, true) : _.set(grid, `_${xy}`, false);
+        let setTile = (player===P1) ? _.set(grid, `_${xy}`, true) : _.set(grid, `_${xy}`, false);
+        return setTile
           }
         else { 
           console.log(chalk.bgRed("Sorry, invalid input. Try again!"))
@@ -296,5 +302,5 @@ else if (grid._11!=="*"&&grid._12!=="*"&&grid._13!=="*"&&grid._21!=="*"&&grid._2
     }
 }
 
-module.exports = {displayGrid, switchPlayer, checkWin, getUserInput, intro, , setTile, cheekyQuote, calculateTile, getUserInput, validateUserInput, playerTurn}
+module.exports = {displayGrid, switchPlayer, checkWin, getUserInput, intro, setTile, cheekyQuote, calculateTile, getUserInput, validateUserInput, playerTurn}
 
